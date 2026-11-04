@@ -64,7 +64,7 @@ export function Shell({ children }: { children: ReactNode }) {
             </Link>
             <nav className="flex gap-6">
               <Link to="/" className={nav} activeProps={active} activeOptions={{ exact: true }}>Ask</Link>
-              <Link to="/sections" className={nav} activeProps={active}>Sections</Link>
+              <Link to="/sections" search={{ act: "BNS", section: "" }} className={nav} activeProps={active}>Sections</Link>
               <Link to="/history" className={nav} activeProps={active}>History</Link>
             </nav>
             <div className="ml-auto flex items-center gap-3">
