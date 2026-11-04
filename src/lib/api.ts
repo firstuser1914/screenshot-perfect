@@ -1,6 +1,6 @@
 // Browser-only API client for the NyayaML FastAPI backend.
 export const API_BASE: string =
-  (import.meta.env.VITE_NYAYA_API_BASE as string | undefined) ?? "http://localhost:8000";
+  (import.meta.env["VITE_NYAYA_API_BASE"] as string | undefined) ?? "http://localhost:8000";
 
 export type Act = "BNS" | "BNSS" | "BSA";
 export const ACTS: Act[] = ["BNS", "BNSS", "BSA"];
@@ -247,7 +247,7 @@ export async function getSection(act: Act, section: string): Promise<SectionResp
 // BNSS-2023-8047fe1de609-S359-SS1-T1-R001. Schedules/forms/unknown → null.
 export function parseCitationId(id: string): { act: Act; section: string } | null {
   const m = /^(BNS|BNSS|BSA)-2023-[0-9a-f]+-S(\d+[A-Z]?)(?:-|$)/.exec(id);
-  return m ? { act: m[1] as Act, section: m[2] } : null;
+  return m && m[2] ? { act: m[1] as Act, section: m[2] } : null;
 }
 
 export const STATIC_DISCLAIMER =
