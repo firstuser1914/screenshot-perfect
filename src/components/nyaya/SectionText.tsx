@@ -4,7 +4,7 @@ import { ErrorBox } from "./Shell";
 
 const pre = "whitespace-pre-wrap";
 
-function SubClauses({ items }: { items?: SubClause[] }) {
+function SubClauses({ items }: { items?: SubClause[] | undefined }) {
   if (!items?.length) return null;
   return (
     <div className="ml-5 space-y-1">
@@ -20,7 +20,7 @@ function SubClauses({ items }: { items?: SubClause[] }) {
   );
 }
 
-function Clauses({ items }: { items?: Clause[] }) {
+function Clauses({ items }: { items?: Clause[] | undefined }) {
   if (!items?.length) return null;
   return (
     <div className="ml-5 space-y-1">
@@ -96,7 +96,7 @@ export function SectionBody({ act, s }: { act: Act; s: SectionResponse }) {
   );
 }
 
-export function SectionLoader({ act, section, onLoaded }: { act: Act; section: string; onLoaded?: (s: SectionResponse) => void }) {
+export function SectionLoader({ act, section, onLoaded }: { act: Act; section: string; onLoaded?: ((s: SectionResponse) => void) | undefined }) {
   const [state, setState] = useState<{ s?: SectionResponse; err?: string }>({});
   useEffect(() => {
     let live = true;
