@@ -31,7 +31,7 @@ export function AnswerBody({ answer, citations, onCite }: { answer: string; cita
             if (m)
               return (
                 <button
-                  onClick={() => onCite(parseInt(m[1], 10) - 1)}
+                  onClick={() => onCite(parseInt(m[1] ?? "1", 10) - 1)}
                   className="mx-0.5 rounded-sm bg-accent px-1 font-sans text-xs font-semibold text-accent-foreground hover:bg-saffron hover:text-saffron-foreground"
                 >
                   {children}
