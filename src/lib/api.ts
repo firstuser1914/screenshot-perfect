@@ -1,6 +1,13 @@
 // Browser-only API client for the NyayaML FastAPI backend.
+//
+// Paths are same-origin by default ("/api/v1/..."): the dev server proxies
+// /api/* to the FastAPI backend (see the proxy in vite.config.ts), so the
+// browser never sends a cross-origin request and the backend's missing CORS
+// middleware never blocks us. Set VITE_NYAYA_API_BASE to an absolute origin
+// only when you want to skip the proxy and talk to the backend directly.
 export const API_BASE: string =
-  (import.meta.env["VITE_NYAYA_API_BASE"] as string | undefined) ?? "http://localhost:8000";
+  (import.meta.env["VITE_NYAYA_API_BASE"] as string | undefined)?.replace(/\/+$/, "") ?? "";
+
 
 export type Act = "BNS" | "BNSS" | "BSA";
 export const ACTS: Act[] = ["BNS", "BNSS", "BSA"];
@@ -132,9 +139,15 @@ async function safeFetch(url: string, init: RequestInit): Promise<Response> {
   try {
     return await fetch(url, init);
   } catch {
-    throw new ApiError(0, `Cannot reach the NyayaML server at ${API_BASE}. It may be offline, or it may be blocking browser requests (CORS is not configured on the backend).`);
+    throw new ApiError(
+      0,
+      API_BASE
+        ? `Cannot reach the NyayaML server at ${API_BASE}. It may be offline, or it may be blocking browser requests (CORS is not configured on the backend).`
+        : "Cannot reach the NyayaML server through this app's /api proxy. The backend may be offline, or the proxy target in vite.config.ts may point at the wrong address.",
+    );
   }
 }
+
 
 // ---------- auth ----------
 type TokenPair = { access_token: string; refresh_token: string; token_type: "bearer"; expires_in: number };

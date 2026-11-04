@@ -4,6 +4,10 @@
 //     nitro (build-only using cloudflare as a default target), VITE_* env injection, @ path alias,
 //     React/TanStack dedupe, error logger plugins, and sandbox detection (port/host/strictPort).
 // You can pass additional config via defineConfig({ vite: { ... }, etc... }) if needed.
+//
+// NOTE: a `vite.server.proxy` rewrite cannot be used here — this sandbox's config
+// wrapper removes server.proxy. Same-origin /api forwarding happens in src/server.ts
+// (see src/lib/api-proxy.ts), which is the equivalent of a Next.js rewrites() rule.
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
 export default defineConfig({
