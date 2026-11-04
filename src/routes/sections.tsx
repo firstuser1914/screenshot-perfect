@@ -1,15 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { zodValidator, fallback } from "@tanstack/zod-adapter";
-import { z } from "zod";
 import { useEffect, useMemo, useState } from "react";
 import { ACTS, QUOTAS, getActs, type Act, type ActsResponse, type SectionResponse } from "@/lib/api";
 import { ErrorBox, Shell, useAuthGuard } from "@/components/nyaya/Shell";
 import { SectionLoader } from "@/components/nyaya/SectionText";
 
 export const Route = createFileRoute("/sections")({
-  validateSearch: zodValidator(
-    z.object({ act: fallback(z.string(), "BNS").default("BNS"), section: fallback(z.string(), "").default("") }),
-  ),
+  validateSearch: (s: Record<string, unknown>): { act: string; section: string } => ({
+    act: typeof s["act"] === "string" ? s["act"] : "BNS",
+    section: typeof s["section"] === "string" ? s["section"] : "",
+  }),
   head: () => ({
     meta: [
       { title: "Statutory Sections — NyayaML" },
@@ -51,7 +50,7 @@ function SectionsPage() {
 
   const rows = useMemo(() => {
     const f = filter.trim().toLowerCase();
-    return seen.filter((s) => s.act === act).filter((s) => !f || s.number.toLowerCase().includes(f) || s.title.toLowerCase().includes(f))
+    return seen.filter((s) => s["act"] === act).filter((s) => !f || s.number.toLowerCase().includes(f) || s.title.toLowerCase().includes(f))
       .sort((a, b) => parseInt(a.number) - parseInt(b.number) || a.number.localeCompare(b.number));
   }, [seen, act, filter]);
 
