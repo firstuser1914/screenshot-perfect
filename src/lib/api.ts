@@ -1,6 +1,13 @@
 // Browser-only API client for the NyayaML FastAPI backend.
+//
+// Paths are same-origin by default ("/api/v1/..."): the dev server proxies
+// /api/* to the FastAPI backend (see the proxy in vite.config.ts), so the
+// browser never sends a cross-origin request and the backend's missing CORS
+// middleware never blocks us. Set VITE_NYAYA_API_BASE to an absolute origin
+// only when you want to skip the proxy and talk to the backend directly.
 export const API_BASE: string =
-  (import.meta.env["VITE_NYAYA_API_BASE"] as string | undefined) ?? "http://localhost:8000";
+  (import.meta.env["VITE_NYAYA_API_BASE"] as string | undefined)?.replace(/\/+$/, "") ?? "";
+
 
 export type Act = "BNS" | "BNSS" | "BSA";
 export const ACTS: Act[] = ["BNS", "BNSS", "BSA"];
