@@ -139,9 +139,15 @@ async function safeFetch(url: string, init: RequestInit): Promise<Response> {
   try {
     return await fetch(url, init);
   } catch {
-    throw new ApiError(0, `Cannot reach the NyayaML server at ${API_BASE}. It may be offline, or it may be blocking browser requests (CORS is not configured on the backend).`);
+    throw new ApiError(
+      0,
+      API_BASE
+        ? `Cannot reach the NyayaML server at ${API_BASE}. It may be offline, or it may be blocking browser requests (CORS is not configured on the backend).`
+        : "Cannot reach the NyayaML server through this app's /api proxy. The backend may be offline, or the proxy target in vite.config.ts may point at the wrong address.",
+    );
   }
 }
+
 
 // ---------- auth ----------
 type TokenPair = { access_token: string; refresh_token: string; token_type: "bearer"; expires_in: number };
