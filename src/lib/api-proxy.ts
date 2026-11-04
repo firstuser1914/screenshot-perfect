@@ -66,10 +66,11 @@ export async function proxyApiRequest(request: Request, origin: string): Promise
     upstream = await fetch(target, {
       method: request.method,
       headers: stripHopByHop(request.headers),
-      body: body && body.byteLength ? body : undefined,
+      body: body && body.byteLength ? body : null,
       redirect: "manual",
       signal: AbortSignal.timeout(30_000),
     });
+
   } catch {
     return Response.json(
       { detail: `The NyayaML backend is not reachable at ${origin}. Start it, or point NYAYA_API_ORIGIN at its address.` },

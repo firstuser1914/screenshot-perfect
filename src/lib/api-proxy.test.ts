@@ -9,17 +9,18 @@ describe("backendOrigin", () => {
   });
 
   it("uses NYAYA_API_ORIGIN when set", () => {
-    process.env.NYAYA_API_ORIGIN = "http://127.0.0.1:9000/";
+    process.env["NYAYA_API_ORIGIN"] = "http://127.0.0.1:9000/";
     expect(backendOrigin()).toBe("http://127.0.0.1:9000");
   });
 
   it("falls back to the local backend outside production, and forwards nothing in production", () => {
-    delete process.env.NYAYA_API_ORIGIN;
-    process.env.NODE_ENV = "development";
+    delete process.env["NYAYA_API_ORIGIN"];
+    process.env["NODE_ENV"] = "development";
     expect(backendOrigin()).toBe("http://127.0.0.1:8000");
-    process.env.NODE_ENV = "production";
+    process.env["NODE_ENV"] = "production";
     expect(backendOrigin()).toBeNull();
   });
+
 });
 
 describe("proxyApiRequest", () => {
